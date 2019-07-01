@@ -1,0 +1,11 @@
+{
+  "name": "relation2705",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/huongnguyen08/relation2705.git",
+  "author": "<huongnguyenak96@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "mongoose": "^5.6.2"
+  }
+}
