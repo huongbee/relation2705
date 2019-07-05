@@ -6,14 +6,14 @@ const { hash } = require('./lib/bcrypt');
 const mongoose = require('mongoose');
 //4.3
 // post id: 5d1cbca406dc5c2f6a1a707d // post 5
-// user id: 5d1cb8c16b54162e91ae7e7d // user 2
+// user id: 5d1cb8c16b54162e91ae7e7c // user 1
 
 PostModel.findById('5d1cbca406dc5c2f6a1a707d')
 .then(async (post)=>{
     const comment = await CommentModel.create({
-        author: '5d1cb8c16b54162e91ae7e7d',
+        author: '5d1cb8c16b54162e91ae7e7c',
         post: post._id,
-        content: 'user 2 comment on post 5 (user 1)'
+        content: 'user 1 comment on post 5 (user 1)'
     })
     return { post, comment }
 })
@@ -96,3 +96,5 @@ async function test(){
 // )
 // .then(users => console.log(users))
 // .catch(err=>console.log(err.message))
+
+// populate()
