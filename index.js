@@ -8,6 +8,24 @@ const mongoose = require('mongoose');
 // post id: 5d1cbca406dc5c2f6a1a707d // post 5
 // user id: 5d1cb8c16b54162e91ae7e7d // user 2
 
+PostModel.findById('5d1cbca406dc5c2f6a1a707d')
+.then(async (post)=>{
+    const comment = await CommentModel.create({
+        author: '5d1cb8c16b54162e91ae7e7d',
+        post: post._id,
+        content: 'user 2 comment on post 5 (user 1)'
+    })
+    return { post, comment }
+})
+.then(obj =>{
+    return PostModel.findByIdAndUpdate(obj.post._id, {
+        $addToSet : { comments: obj.comment._id },
+    }, { new: true })
+})
+.then(post => console.log(post))
+.catch(err=>console.log(err.message))
+
+
 async function test(){
 
     const session = await CommentModel.startSession();
@@ -32,7 +50,7 @@ async function test(){
         console.log({ post })
     }
 }
-test()
+// test()
 
 
 
