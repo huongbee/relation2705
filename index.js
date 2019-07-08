@@ -4,6 +4,29 @@ const { PostModel } = require('./models/post.model');
 const { CommentModel } = require('./models/comment.model');
 const { hash } = require('./lib/bcrypt');
 const mongoose = require('mongoose');
+// 4.12
+// 5d1cbca406dc5c2f6a1a707d: id post 5
+PostModel.findById('5d1cbca406dc5c2f6a1a707d')
+.populate('author', { _id: 0, name: 1 })
+.populate({
+    path: 'comments',
+    select: { _id: 0, author: 1, content: 1},
+    populate: { // populate for comment
+        path: 'author',
+        select: { _id: 0, name: 1 }
+    }
+})
+.then(post=>{
+    console.log('So luot like: '+ post.likes.length)
+    console.log('Tac gia: '+ post.author.name)
+    console.log('DS comments: ')
+    post.comments.forEach(comment => {
+        console.log('- Noi dung: '+ comment.content)
+        console.log('  Tac gia: '+ comment.author.name)
+    })
+})
+.catch(err=>console.log(err.message))
+
 
 //4.10
 // UserModel.findOne({email: 'manager@gmail.com'})
