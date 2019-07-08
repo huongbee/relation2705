@@ -4,22 +4,45 @@ const { PostModel } = require('./models/post.model');
 const { CommentModel } = require('./models/comment.model');
 const { hash } = require('./lib/bcrypt');
 const mongoose = require('mongoose');
+
+//4.10
+// UserModel.findOne({email: 'manager@gmail.com'})
+// .then(user=>{
+//     if(!user) throw new Error('Cannot find user!')
+//     return console.log(user.friends.length)
+// })
+// .catch(err=>console.log(err.message))
+
+
+// 4.9
+// UserModel.findOne({email: 'admin@gmail.com'})
+// .populate({
+//     path: 'posts',
+//     // select: 'content comments'
+//     select: { content: 1, _id: 0 }
+// })
+// .select('email')
+// .then(user=>console.log(user))
+// .catch(err=>console.log(err.message))
+
+
+
 // 4.8
-UserModel.findOne({email: 'manager@gmail.com'})
-.then(userA=>{
-    if(!userA) throw new Error('Cannot find a!')
-    return UserModel.findOneAndUpdate({email:'guest@gmail.com'},{
-        $pull: { friends: userA._id}
-    })
-})
-.then(userB=>{
-    if(!userB) throw new Error('Cannot find user!')
-    return UserModel.findOneAndUpdate({email:'manager@gmail.com'},{
-        $pull: { friends: userB._id}
-    })
-})
-.then(userA=>console.log(userA))
-.catch(err=>console.log(err.message))
+// UserModel.findOne({email: 'manager@gmail.com'})
+// .then(userA=>{
+//     if(!userA) throw new Error('Cannot find a!')
+//     return UserModel.findOneAndUpdate({email:'guest@gmail.com'},{
+//         $pull: { friends: userA._id}
+//     })
+// })
+// .then(userB=>{
+//     if(!userB) throw new Error('Cannot find user!')
+//     return UserModel.findOneAndUpdate({email:'manager@gmail.com'},{
+//         $pull: { friends: userB._id}
+//     })
+// })
+// .then(userA=>console.log(userA))
+// .catch(err=>console.log(err.message))
 
 // 4.7
 // UserModel.findOne({email: 'manager@gmail.com'})
