@@ -5,6 +5,14 @@ const { CommentModel } = require('./models/comment.model');
 const { hash } = require('./lib/bcrypt');
 const mongoose = require('mongoose');
 
+// 4.4
+UserModel.findOne({email: 'manager@gmail.com'})
+.then(user=>PostModel.findByIdAndUpdate('5d1cbca406dc5c2f6a1a707d',{
+    $addToSet: { likes: user._id }
+}, { new : true }))
+.then(post=>console.log(post))
+.catch(err=>console.log(err.message))
+
 
 
 //4.3
