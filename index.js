@@ -4,23 +4,41 @@ const { PostModel } = require('./models/post.model');
 const { CommentModel } = require('./models/comment.model');
 const { hash } = require('./lib/bcrypt');
 const mongoose = require('mongoose');
-
-//4.6
-UserModel.findOne({email: 'guest@gmail.com'})
-.then(receiver=>{
-    if(!receiver) throw new Error('Cannot find receiver!')
-    return UserModel.findOneAndUpdate({email:'manager@gmail.com'},{
-        $addToSet: { sendRequests: receiver._id }
+// 4.7
+UserModel.findOne({email: 'manager@gmail.com'})
+.then(sender=>{
+    if(!sender) throw new Error('Cannot find sender')
+    return UserModel.findOneAndUpdate({email: 'guest@gmail.com'},{
+        $pull: { receiveRequests: sender._id },
+        $addToSet: { friends: sender._id }
     })
 })
-.then(sender=>{
-    if(!sender) throw new Error('Cannot find sender!')
-    return UserModel.findOneAndUpdate({email: 'guest@gmail.com'},{
-        $addToSet: { receiveRequests: sender._id}
-    }, { new: true })
+.then(receiver=>{
+    if(!receiver) throw new Error('Cannot find receiver')
+    return UserModel.findOneAndUpdate({email: 'manager@gmail.com'},{
+        $pull: { sendRequests: receiver._id },
+        $addToSet: { friends: receiver._id }
+    })
 })
 .then(receiver=>console.log(receiver))
 .catch(err=>console.log(err.message))
+
+//4.6
+// UserModel.findOne({email: 'guest@gmail.com'})
+// .then(receiver=>{
+//     if(!receiver) throw new Error('Cannot find receiver!')
+//     return UserModel.findOneAndUpdate({email:'manager@gmail.com'},{
+//         $addToSet: { sendRequests: receiver._id }
+//     })
+// })
+// .then(sender=>{
+//     if(!sender) throw new Error('Cannot find sender!')
+//     return UserModel.findOneAndUpdate({email: 'guest@gmail.com'},{
+//         $addToSet: { receiveRequests: sender._id}
+//     }, { new: true })
+// })
+// .then(receiver=>console.log(receiver))
+// .catch(err=>console.log(err.message))
 
 
 // 4.5
