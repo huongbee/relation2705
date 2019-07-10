@@ -5,18 +5,51 @@ const { CommentModel } = require('./models/comment.model');
 const { hash } = require('./lib/bcrypt');
 const mongoose = require('mongoose');
 
-// 4.13
-PostModel.findById("5d1cbca406dc5c2f6a1a707d")
-.populate({
-    path: 'author',
-    match: { email: 'admin@gmail.com' }
+//4.15
+PostModel.find({
+    $where : function (){
+        return this.likes.length == 0
+    }
+}).select('_id')
+.then(async (posts)=>{
+    // delete comment by _id post
+    await CommentModel.find({
+        post: { $in : posts.map(obj=>obj._id) }
+    }).remove()
+
+    // update user remove _id post
+    // const p = posts.map(obj=>obj._id)
+    // const users = await UserModel.find({
+    //     $where: function(){
+    //         return this.posts
+    //         .filter((x)=>{
+    //             const y = p.map(obj=>obj._id).includes(x)
+    //             console.log(y)
+    //         })
+    //     }
+    // })
+    // console.log(users)
+    await PostModel.find({
+        _id: { $in : posts.map(obj=>obj._id) }
+    }).remove()
 })
-.populate({
-    path: 'comments',
-    options: { limit: 1 , sort: { content: 'asc' }}
-})
-.then(post=>console.log(post.comments[0].likes.length))
+
 .catch(err=>console.log(err.message))
+
+
+
+// 4.13
+// PostModel.findById("5d1cbca406dc5c2f6a1a707d")
+// .populate({
+//     path: 'author',
+//     match: { email: 'admin@gmail.com' }
+// })
+// .populate({
+//     path: 'comments',
+//     options: { limit: 1 , sort: { content: 'asc' }}
+// })
+// .then(post=>console.log(post.comments[0].likes.length))
+// .catch(err=>console.log(err.message))
 
 // 4.12
 // 5d1cbca406dc5c2f6a1a707d: id post 5
